@@ -1,15 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Document</title>
-</head>
-<body>
-  <h1 id="title">HTML Treewalker</h1>
-  <section id="main__container"></section>
-  <script type="module" src="./getClient.js"></script>
-  <script type="module" src="./main.js"></script>
-</body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="modal.css" />
+		<link rel="stylesheet" href="tree.css" />
+		<title>Document</title>
+	</head>
+	<body>
+		<section id="intro-modal" class="modal">
+			<p>
+				Lorem ipsum dolor sit amet consectetur, adipisicing elit. Deleniti modi
+				nostrum reiciendis beatae maiores unde cumque eveniet animi facere iste
+				omnis id, reprehenderit non eum facilis incidunt pariatur culpa aut.
+			</p>
+			<button class="btn" id="close-instructions">
+				Okay! Take me to the app
+			</button>
+		</section>
+		<div id="intro-overlay" class="overlay"></div>
+		<section id="main__container" class="main__container">
+			<h1 id="title">HTML Treewalker</h1>
+		</section>
+		<script type="module" src="./getClient.js"></script>
+		<script type="module" src="./dataStructures.js"></script>
+		<script type="module" src="./interactivity.js"></script>
+	</body>
 </html>
