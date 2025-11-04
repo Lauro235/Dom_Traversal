@@ -1,11 +1,56 @@
+:root {
+	--var-dark: #1d0b11;
+	--var-bright: #ff6b6b;
+	--var-accent: #8a2be2;
+}
+
+@keyframes blink {
+  0%, 50% {caret-color: transparent;}
+  100% {caret-color: #1d0b11;}
+}
+
 body {
-  display: contents;
-  position: relative;
+	display: contents;
+	position: relative;
 }
 
 .main__container {
-  /* top: 0; */
-  height: 100vw;
-  background-color: darkslategrey;
+	/* top: 0; */
+	height: 100vw;
+	background-color: darkslategrey;
+	text-align: center;
 }
 
+.title {
+	position: relative;
+	top: 20px;
+	padding: 1rem auto;
+}
+
+input {
+  position: absolute;
+  background-color: var(--var-bright);
+  color: var(--var-accent);
+  width: 100%;
+  min-height: min-content;
+  padding-left: 1rem;
+  font-size: 3rem;
+  bottom: 0;
+  left: 0;
+  border-style: none;
+}
+
+input[type="text"], [contenteditable="true"] {
+  /* cursor: text; */
+  /* caret-animation: manual; */
+  /* -webkit-animation: manual; */
+  caret-color: var(--var-accent);
+  caret-shape: block;
+  /* caret-shape: underscore; */
+  animation: blink 3s step-start infinite;
+}   
+
+textarea:focus,
+input:focus {
+  /* inherits: true; */
+}

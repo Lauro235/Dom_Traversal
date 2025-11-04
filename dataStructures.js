@@ -20,18 +20,6 @@ const clientBody = clientDocument.body;
 const nodeList = [];
 const nodeMemo = new Map();
 
-const treeWalker = clientDocument.createTreeWalker(
-  clientDocument.body,
-  NodeFilter.SHOW_ELEMENT,
-  {
-    acceptNode(node) {
-      return NodeFilter.FILTER_ACCEPT;
-    },
-  },
-  false
-);
-
-let currentNode = treeWalker.currentNode;
 
 const buildNodeMemo = (node, memo) => {
   // if (key in memo) return memo;
@@ -48,15 +36,28 @@ const buildNodeMemo = (node, memo) => {
     buildNodeMemo(node.firstElementChild, memo);
     buildNodeMemo(node.nextElementSibling, memo);
   }
-  console.log(memo.get(node));
   return memo
 }
 
-console.log(buildNodeMemo(clientBody, nodeMemo))
-while (currentNode) {
+buildNodeMemo(clientBody, nodeMemo)
 
+// push all nodes to list - lists in order of appearance. Is this useful?
+
+const treeWalker = clientDocument.createTreeWalker(
+  clientDocument.body,
+  NodeFilter.SHOW_ELEMENT,
+  {
+    acceptNode(node) {
+      return NodeFilter.FILTER_ACCEPT;
+    },
+  },
+  false
+);
+
+let currentNode = treeWalker.currentNode;
+
+while (currentNode) {
   nodeList.push({node: currentNode});
   currentNode = treeWalker.nextNode();
 }
 
-// console.log(treeWalker.filter);
