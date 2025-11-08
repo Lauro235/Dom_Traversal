@@ -4,29 +4,63 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="stylesheet" href="modal.css" />
-		<link rel="stylesheet" href="tree.css" />
+		<link rel="stylesheet" href="style.css" />
 		<title>Document</title>
 	</head>
 	<body>
 		<section id="intro-modal" class="modal">
-			<p>
-				Lorem ipsum dolor sit amet consectetur, adipisicing elit. Deleniti modi
-				nostrum reiciendis beatae maiores unde cumque eveniet animi facere iste
-				omnis id, reprehenderit non eum facilis incidunt pariatur culpa aut.
-			</p>
+			<h3>Welcome</h3>
+			<p>Here's a brief run down of the apps functionality.</p>
+			<ul>
+				<li>
+					Move to the next sibling node with "Control left" and "Control right"
+				</li>
+				<li>Move to the first child node with "Control Down"</li>
+				<li>Move to the parent node with "Control up"</li>
+				<li>
+					Control node depth visibility by typing "/" to get to the input and
+					then a number to determine how many levels of node you wish to view
+					(max capability is four)
+				</li>
+			</ul>
 			<button class="btn" id="close-instructions">
 				Okay! Take me to the app
 			</button>
 		</section>
 		<div id="intro-overlay" class="overlay"></div>
-		<section id="main__container" class="main__container">
-			<h1 class="title" id="title">HTML Treewalker</h1>
-      <div id="node__container" class="node__container">
-        <!-- Ensure that the id of each element generated is unique -->
-        <div id="body32215" class="node"></div>
-      </div>
-      <input type="text" contenteditable="true" value="/" name="command" id="command__input">
-		</section>
+		<div class="main-container">
+			<div id="node-container" class="node-container">
+				<div class="node" data-node-id="section">
+					<div class="node-header">
+						<span class="node-tag">section</span>
+					</div>
+				</div>
+				<div class="node" data-node-id="footer">
+					<div class="node-header">
+						<span class="node-tag">footer</span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="fixed">
+			<div class="terminal">
+				<div class="arrow-controls">
+					<button class="navigation__arrow">↑</button>
+					<div class="arrow-row">
+						<button class="navigation__arrow">←</button>
+						<button class="navigation__arrow">↓</button>
+						<button class="navigation__arrow">→</button>
+					</div>
+				</div>
+				<div class="terminal-output">
+					<div class="terminal-line">Welcome to the terminal!</div>
+					<div class="terminal-line">
+						$<input type="text" id="terminal-input" class="terminal-input" />
+					</div>
+				</div>
+			</div>
+		</div>
 		<script type="module" src="./getClient.js"></script>
 		<script type="module" src="./dataStructures.js"></script>
 		<script type="module" src="./format.js"></script>

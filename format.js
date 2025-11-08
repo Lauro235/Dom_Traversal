@@ -8,16 +8,9 @@ class ContainerDimensions {
 }
 
 // GLOBAL VARIABLES
-const title = document.getElementById("title");
-const commandInput = document.getElementById("command__input")
-const nodeContainer = document.getElementById("node__container");
+const terminalInput = document.getElementById("terminal-input")
+const nodeContainer = document.getElementById("node-container");
 let containerDimensions = new ContainerDimensions(window.innerHeight, window.innerWidth)
-
-// place node container beneath title.
-nodeContainer.style.top = title.clientHeight + 32 + "px"
-
-// Update node window height
-nodeContainer.style.height = (containerDimensions.height - (title.clientHeight + commandInput.offsetHeight + 64)) + "px"
 
 window.addEventListener('resize', function() {
     containerDimensions.width = window.innerWidth;

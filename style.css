@@ -1,0 +1,146 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: Arial, sans-serif;
+	background-color: #1e1e1e;
+	color: #fff;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+.fixed {
+	position: fixed;
+}
+
+.main-container {
+	flex: 1;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+	grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 20px;
+	gap: 20px;
+}
+
+.arrow-controls {
+	position: absolute;
+	right: 20px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 10px;
+}
+
+.arrow-row {
+	display: flex;
+	gap: 10px;
+}
+
+button {
+	width: 50px;
+	height: 50px;
+	font-size: 24px;
+	background-color: #333;
+	color: #0f0;
+	border: 2px solid #0f0;
+	cursor: pointer;
+	border-radius: 4px;
+	transition: all 0.2s;
+}
+
+button:hover, button:focus {
+	background-color: #0f0;
+	color: #000;
+}
+
+.node-container {
+	grid-column: 1/-1;
+	grid-row: 1/5;
+	border: 2px solid #0f0;
+	background-color: #0a0a0a;
+	min-height: 100%;
+	width: 100%;
+	border-radius: 4px;
+	font-family: "Courier New", monospace;
+	overflow-y: auto;
+
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+
+
+}
+
+.terminal {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	background-color: #0a0a0a;
+	color: #0f0;
+	font-family: "Courier New", monospace;
+	font-size: 18px;
+	padding: 15px;
+	box-sizing: border-box;
+	border-top: 2px solid #0f0;
+	overflow-y: auto;
+	height: 150px;
+}
+
+.terminal-input {
+	width: 100%;
+	max-width: 800px;
+	background-color: #000;
+	/* border: 1px solid grey; */
+	border: none;
+	border-radius: 4px;
+	color: #0f0;
+	font-weight: bold;
+	margin-left: 6px;
+	font-size: 22px;
+}
+
+.terminal-output {
+	height: 100%;
+	overflow-y: auto;
+}
+
+.terminal-line {
+	margin: 5px 0;
+}
+
+.node {
+  border: 1px solid #999;
+  border-radius: 4px;
+  padding: 10px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.node-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.node-tag {
+  font-weight: bold;
+  color: #333;
+}
+
+.node-type {
+  color: #666;
+  font-size: 0.9em;
+}
