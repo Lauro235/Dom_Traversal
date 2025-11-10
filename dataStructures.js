@@ -18,12 +18,20 @@ class HTMLNode {
 class CurrentNode {
   constructor(node, siblingSet = new Set(), siblings = null) {
     this.node = node;
+    this.err = this.improperNode(node)
+
+    if (this.err) {
+      console.error("node must exist within the DOM and may not be <head>, <body> or <script>.")
+      return;
+    }
+    
     this.children = node.children;
     this.siblingSet = siblingSet;
 
     if (!this.siblingSet.has(node)) {
+      this.siblingSet.clear()
       this.siblingSet = this.findSiblings(node, this.siblingSet);
-      this.siblings = this.sortSiblings(this.siblingSet);
+      this.siblings = this.siblingSet.size > 0 ? this.sortSiblings(this.siblingSet) : [];
     }
     // else siblingSet does have node and we do not need to call findSiblings again.
     else {
@@ -31,6 +39,14 @@ class CurrentNode {
     }
     
   }
+  
+  improperNode(node) {
+    if (node === null || node.tagName === "SCRIPT" || node.tagName === "HEAD" || node.tagName === "BODY") {
+      return true;
+    }
+    return false;
+  }
+  
   findSiblings (node, nodeSet = new Set()) {
     if (node === null || nodeSet.has(node) || node.tagName === "SCRIPT") return nodeSet;
     if (node !== null && !nodeSet.has(node)) {
@@ -45,11 +61,11 @@ class CurrentNode {
       this.findSiblings(node.nextElementSibling, nodeSet);
     }
 
-    // const unsortedSet = [...nodeSet];
     return nodeSet;
   }
+
   sortSiblings(siblingSet) {
-    return siblingSet.sort((a, b) => {
+    return [...siblingSet].sort((a, b) => {
       if (a === b) return 0;
       if (!a.compareDocumentPosition) {
         // Support for IE8 and below
@@ -67,36 +83,6 @@ class CurrentNode {
 // GLOBAL VARS
 
 const clientBody = clientDocument.body;
-const nodeList = [];
-
-const findSiblings = (node, nodeSet = new Set()) => {
-  if (node === null || nodeSet.has(node) || node.tagName === "SCRIPT") return nodeSet;
-  if (node !== null && !nodeSet.has(node)) {
-    nodeSet.add(node);
-  }
-
-  // check for previous siblings. if previous sibling exist add to set
-  if (node.previousElementSibling) {
-    findSiblings(node.previousElementSibling, nodeSet)
-  }
-  if (node.nextElementSibling) {
-    findSiblings(node.nextElementSibling, nodeSet);
-  }
-
-  // const unsortedSet = [...nodeSet];
-  return [...nodeSet].sort((a, b) => {
-    if (a === b) return 0;
-    if (!a.compareDocumentPosition) {
-      // Support for IE8 and below
-      return a.sourceIndex - b.sourceIndex;
-    }
-    if (a.compareDocumentPosition(b) & 2) {
-      // b comes before a
-      return 1;
-    }
-    return -1;
-  });
-};
 
 const buildNodeMemo = (node = document.body.firstElementChild, memo = new Map()) => {
   // if (key in memo) return memo;
@@ -122,27 +108,10 @@ const buildNodeMemo = (node = document.body.firstElementChild, memo = new Map())
   return memo
 }
 
-// push all nodes to list - lists in order of appearance. Is this useful?
 
-const treeWalker = clientDocument.createTreeWalker(
-  clientDocument.body,
-  NodeFilter.SHOW_ELEMENT,
-  {
-    acceptNode(node) {
-      return NodeFilter.FILTER_ACCEPT;
-    },
-  },
-  false
-);
+let currentNode = new CurrentNode(clientBody.firstElementChild);
 
-let currentNode = treeWalker.currentNode;
-
-const nodeMemo = buildNodeMemo(clientBody)
-console.log(nodeMemo.get(clientBody));
+console.log(currentNode);
 
 
-while (currentNode) {
-  nodeList.push({ node: currentNode });
-  currentNode = treeWalker.nextNode();
-}
 
