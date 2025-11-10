@@ -32,6 +32,7 @@ class CurrentNode {
       this.siblingSet.clear()
       this.siblingSet = this.findSiblings(node, this.siblingSet);
       this.siblings = this.siblingSet.size > 0 ? this.sortSiblings(this.siblingSet) : [];
+      // this.siblings = this.sortSiblings(this.siblingSet);
     }
     // else siblingSet does have node and we do not need to call findSiblings again.
     else {
@@ -61,9 +62,9 @@ class CurrentNode {
       this.findSiblings(node.nextElementSibling, nodeSet);
     }
 
+    // const unsortedSet = [...nodeSet];
     return nodeSet;
   }
-
   sortSiblings(siblingSet) {
     return [...siblingSet].sort((a, b) => {
       if (a === b) return 0;
@@ -108,8 +109,8 @@ const buildNodeMemo = (node = document.body.firstElementChild, memo = new Map())
   return memo
 }
 
-
 let currentNode = new CurrentNode(clientBody.firstElementChild);
+currentNode = new CurrentNode(currentNode.node.nextElementSibling, currentNode.siblingSet, currentNode.siblings);
 
 console.log(currentNode);
 
