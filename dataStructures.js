@@ -112,7 +112,7 @@ const buildNodeMemo = (node = document.body.firstElementChild, memo = new Map())
 let currentNode = new CurrentNode(clientBody.firstElementChild);
 currentNode = new CurrentNode(currentNode.node.nextElementSibling, currentNode.siblingSet, currentNode.siblings);
 
-console.log(currentNode);
+export { CurrentNode }
 
 
 

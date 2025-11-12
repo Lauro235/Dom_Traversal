@@ -133,11 +133,11 @@ button:hover, button:focus {
 }
 
 [data-node-id="current"] {
-  grid-row: 2/5;
+  grid-row: 2/3;
 }
 
 [data-node-id="children"] {
-  grid-row: 5/6;
+  grid-row: 3/4;
 }
 
 .node-header {
@@ -155,4 +155,22 @@ button:hover, button:focus {
 .node-type {
   color: #666;
   font-size: 0.9em;
+}
+
+/* JAVASCRIPT APPLIED CLASSES. DO NOT DELETE WITHOUT MODIFYING the class application in paint.js*/
+
+div[data-node-id="current"].take-up-all-rows {
+  grid-row: 1/-1;
+}
+
+.take-up-first-half-vertical-space {
+  grid-row: 1/2;
+}
+
+.take-up-last-half-vertical-space {
+  grid-row: 2/3;
+}
+
+.hidden {
+  visibility: hidden;
 }
