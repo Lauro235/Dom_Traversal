@@ -12,13 +12,10 @@ function setCurrentNode(currentNode) {
   return new CurrentNode(currentNode, currentNode?.siblingSet, currentNode?.siblings);
 }
 
-function setUpGrid(node) {
+function setUpGrid(isParent, isChild) {
   // manipulates grid through applying preselected classes and modifying template rows.
-  const isParent = node.parentElement;
-  const parentCheck = isParent.tagName !== "BODY"
-  const isChild = node.children.length > 0;
   
-  if (isParent && parentCheck && isChild) {
+  if (isParent && isChild) {
     childrenNodeContainer.classList.remove("hidden")
     parentNodeContainer.classList.remove("hidden");
     nodeContainer.style.gridTemplateRows = "1fr 1fr 1fr";
@@ -32,7 +29,7 @@ function setUpGrid(node) {
     });
     
   }
-  else if (isParent && parentCheck && !isChild) {
+  else if (isParent && !isChild) {
     childrenNodeContainer.classList.add("hidden");
     parentNodeContainer.classList.remove("hidden");
 
@@ -40,7 +37,7 @@ function setUpGrid(node) {
     currentNodeContainer.classList.add("take-up-last-half-vertical-space")
     nodeContainer.style.gridTemplateRows = "1fr 1fr"
   }
-  else if (!isParent || !parentCheck && isChild) {
+  else if (!isParent && isChild) {
     parentNodeContainer.classList.add("hidden");
     childrenNodeContainer.classList.remove("hidden");
 
@@ -56,16 +53,28 @@ function setUpGrid(node) {
   }
 }
 
+function checkValidParent(node) {
+  return (node.parentElement && node.parentElement.tagName !== "BODY");
+}
+
+function checkValidChildren(node) {
+  return (node.children.length > 0);
+}
+
 function paint() {
-  // debugger;
-  
   // paint cycle
   // set current node
-  let currentNode = setCurrentNode(firstNodeTest.children[1]);
-  console.log(currentNode);
-  
+  let currentNode = setCurrentNode(firstNodeTest);
 
-  setUpGrid(currentNode.node)
+  // parent checks needed for rendering, must be reusable
+  const isParent = checkValidParent(currentNode.node);
+  const isChild = checkValidChildren(currentNode.node);
+
+  // Ensure correct grid layout
+  setUpGrid(isParent, isChild);
+
+  // render current gen
+  
   
   
   
