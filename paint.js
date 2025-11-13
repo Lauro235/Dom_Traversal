@@ -2,7 +2,7 @@ import clientDocument from "./getClient.js";
 import { CurrentNode } from "./dataStructures.js";
 import { childrenNodeContainer, nodeContainer, currentNodeContainer, parentNodeContainer } from "./selectors.js";
 
-const firstNodeTest = clientDocument.body.children[2];
+const firstNodeTest = clientDocument.body.children[0];
 
 function setCurrentNode(currentNode) {
   if (currentNode === null || currentNode === undefined) {
@@ -53,6 +53,23 @@ function setUpGrid(isParent, isChild) {
   }
 }
 
+function renderCurrentNodeGeneration(currentNode) {
+  currentNode.siblings.forEach((node, i) => {
+    console.log(node);
+    const nodeElement = document.createElement("div");
+    nodeElement.classList.add("node");
+    nodeElement.setAttribute("tabindex", i);
+    currentNodeContainer.querySelector(".flex").appendChild(nodeElement)
+    if (node === currentNode.node) {
+      // focus the node
+      console.log("this node is the starting node: expecting first child", nodeElement);
+      
+      nodeElement.classList.add("focus");
+    }
+    
+  })
+}
+
 function checkValidParent(node) {
   return (node.parentElement && node.parentElement.tagName !== "BODY");
 }
@@ -73,7 +90,10 @@ function paint() {
   // Ensure correct grid layout
   setUpGrid(isParent, isChild);
 
+  // At this point I had the thought to extract the sibling helpers out of the CurrentNode class, but for now, I'm content with only rendering a single parent. I could potentially have 2 CurrentNode instances to have access to the sibling helpers for the parent. .children covers descendent nodes.
+  
   // render current gen
+  renderCurrentNodeGeneration(currentNode)
   
   
   

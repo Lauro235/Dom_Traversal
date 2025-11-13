@@ -55,7 +55,8 @@ button {
 	transition: all 0.2s;
 }
 
-button:hover, button:focus {
+button:hover,
+button:focus {
 	background-color: #0f0;
 	color: #000;
 }
@@ -71,15 +72,12 @@ button:hover, button:focus {
 	font-family: "Courier New", monospace;
 	overflow-y: auto;
 
-
-  display: grid;
-  flex-direction: column;
-  gap: 10px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-
-
+	display: grid;
+	flex-direction: column;
+	gap: 10px;
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
 }
 
 .terminal {
@@ -120,57 +118,82 @@ button:hover, button:focus {
 	margin: 5px 0;
 }
 
-.node {
-  border: 1px solid #999;
-  border-radius: 4px;
-  padding: 10px;
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+.node-row {
+	border: 1px solid #999;
+	border-radius: 4px;
+	padding: 10px;
+	background-color: #fff;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 [data-node-id="parent"] {
-  grid-row: 1/2;
+	grid-row: 1/2;
 }
 
 [data-node-id="current"] {
-  grid-row: 2/3;
+	grid-row: 2/3;
 }
 
 [data-node-id="children"] {
-  grid-row: 3/4;
+	grid-row: 3/4;
 }
 
-.node-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 5px;
+/* .node-header { */
+.flex {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 5px;
+
+	/* styles for span.node-tag */
+	height: 100%;
+	position: relative;
+}
+
+.node {
+	width: 42px;
+	height: 42px;
+	border-radius: 50%;
+	background-color: #e0e0e0;
+	border: 1px solid #c0c0c0;
+	transition: background-color 0.2s ease;
+}
+
+.focus {
+  background-color: #0f0;
+}
+
+.node:hover {
+	background-color: #c0c0c0;
+	cursor: pointer;
 }
 
 .node-tag {
-  font-weight: bold;
-  color: #333;
+	font-weight: bold;
+	color: #333;
+	position: absolute;
+	bottom: 10px;
 }
 
 .node-type {
-  color: #666;
-  font-size: 0.9em;
+	color: #666;
+	font-size: 0.9em;
 }
 
 /* JAVASCRIPT APPLIED CLASSES. DO NOT DELETE WITHOUT MODIFYING the class application in paint.js*/
 
 div[data-node-id="current"].take-up-all-rows {
-  grid-row: 1/-1;
+	grid-row: 1/-1;
 }
 
 .take-up-first-half-vertical-space {
-  grid-row: 1/2;
+	grid-row: 1/2;
 }
 
 .take-up-last-half-vertical-space {
-  grid-row: 2/3;
+	grid-row: 2/3;
 }
 
 .hidden {
-  visibility: hidden;
+	visibility: hidden;
 }
