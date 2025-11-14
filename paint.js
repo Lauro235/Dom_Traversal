@@ -1,71 +1,86 @@
 import clientDocument from "./getClient.js";
-import { CurrentNode } from "./dataStructures.js";
-import { childrenNodeContainer, nodeContainer, currentNodeContainer, parentNodeContainer } from "./selectors.js";
+import { childrenNodeContainerElement, nodeContainerElement, currentNodeContainerElement, parentNodeContainerElement } from "./selectors.js";
+// import { childrenNodeContainer, nodeContainer, currentNodeContainer, parentNodeContainer } from "./selectors.js";
+import { CurrentNode, NodeRect } from "./classes.js";
 
 const firstNodeTest = clientDocument.body.children[0];
 
-function setCurrentNode(currentNode) {
-  if (currentNode === null || currentNode === undefined) {
+function setCurrentNode(externalCurrentNode) {
+  if (externalCurrentNode === null || externalCurrentNode === undefined) {
     return new CurrentNode(clientDocument.body.firstElementChild);
   }
   
-  return new CurrentNode(currentNode, currentNode?.siblingSet, currentNode?.siblings);
+  return new CurrentNode(externalCurrentNode, externalCurrentNode?.siblingSet, externalCurrentNode?.siblings);
 }
 
 function setUpGrid(isParent, isChild) {
   // manipulates grid through applying preselected classes and modifying template rows.
   
   if (isParent && isChild) {
-    childrenNodeContainer.classList.remove("hidden")
-    parentNodeContainer.classList.remove("hidden");
-    nodeContainer.style.gridTemplateRows = "1fr 1fr 1fr";
+    childrenNodeContainerElement.classList.remove("hidden")
+    parentNodeContainerElement.classList.remove("hidden");
+    nodeContainerElement.style.gridTemplateRows = "1fr 1fr 1fr";
     
     // As all nodes need to be equally prioritised we must remove all classes that effect row formatting 
-    console.log([parentNodeContainer, currentNodeContainer, childrenNodeContainer]);
+    console.log([parentNodeContainerElement, currentNodeContainerElement, childrenNodeContainerElement]);
     
     
-    [parentNodeContainer, currentNodeContainer, childrenNodeContainer].forEach(element => {
+    [parentNodeContainerElement, currentNodeContainerElement, childrenNodeContainerElement].forEach(element => {
       element.classList.remove("take-up-all-rows", "take-up-first-half-vertical-space", "take-up-last-half-vertical-space")
     });
     
   }
   else if (isParent && !isChild) {
-    childrenNodeContainer.classList.add("hidden");
-    parentNodeContainer.classList.remove("hidden");
+    childrenNodeContainerElement.classList.add("hidden");
+    parentNodeContainerElement.classList.remove("hidden");
 
-    parentNodeContainer.classList.add("take-up-first-half-vertical-space")
-    currentNodeContainer.classList.add("take-up-last-half-vertical-space")
-    nodeContainer.style.gridTemplateRows = "1fr 1fr"
+    parentNodeContainerElement.classList.add("take-up-first-half-vertical-space")
+    currentNodeContainerElement.classList.add("take-up-last-half-vertical-space")
+    nodeContainerElement.style.gridTemplateRows = "1fr 1fr"
   }
   else if (!isParent && isChild) {
-    parentNodeContainer.classList.add("hidden");
-    childrenNodeContainer.classList.remove("hidden");
+    parentNodeContainerElement.classList.add("hidden");
+    childrenNodeContainerElement.classList.remove("hidden");
 
-    currentNodeContainer.classList.add("take-up-first-half-vertical-space")
-    childrenNodeContainer.classList.add("take-up-last-half-vertical-space")
-    nodeContainer.style.gridTemplateRows = "1fr 1fr"
+    currentNodeContainerElement.classList.add("take-up-first-half-vertical-space")
+    childrenNodeContainerElement.classList.add("take-up-last-half-vertical-space")
+    nodeContainerElement.style.gridTemplateRows = "1fr 1fr"
   }
   else {
-    childrenNodeContainer.classList.add("hidden");
-    parentNodeContainer.classList.add("hidden");
-    currentNodeContainer.classList.add("take-up-all-rows")
-    nodeContainer.style.gridTemplateRows = "1fr"
+    childrenNodeContainerElement.classList.add("hidden");
+    parentNodeContainerElement.classList.add("hidden");
+    currentNodeContainerElement.classList.add("take-up-all-rows")
+    nodeContainerElement.style.gridTemplateRows = "1fr"
   }
 }
 
-function renderCurrentNodeGeneration(currentNode) {
-  currentNode.siblings.forEach((node, i) => {
-    console.log(node);
+function renderCurrentNodeGeneration(externalCurrentNode) {
+  /*
+    externalCurrentNode refers to external node as does node.node
+    nodeElement refers to clientNode which is appended to nodeContainer.
+  */
+  
+  
+  externalCurrentNode.siblings.forEach((sibling, i) => {
     const nodeElement = document.createElement("div");
     nodeElement.classList.add("node");
     nodeElement.setAttribute("tabindex", i);
-    currentNodeContainer.querySelector(".flex").appendChild(nodeElement)
-    if (node === currentNode.node) {
+    currentNodeContainerElement.querySelector(".flex").appendChild(nodeElement)
+
+    // At this point we can update the externalCurrentNode (passed via initial arg) with .siblings at i with new NodeRect(nodeElement) 
+
+    externalCurrentNode.siblings[i] = new NodeRect(sibling.externalNode, nodeElement)
+    // console.log(externalCurrentNode.siblings);
+    
+    if (sibling.externalNode === externalCurrentNode.node) {
       // focus the node
       console.log("this node is the starting node: expecting first child", nodeElement);
-      
+      // console.log(node);
       nodeElement.classList.add("focus");
     }
+
+    // don't expect sibling to update after updating the externalCurrentNode siblings 
+    // console.log(sibling);
     
   })
 }
@@ -81,11 +96,11 @@ function checkValidChildren(node) {
 function paint() {
   // paint cycle
   // set current node
-  let currentNode = setCurrentNode(firstNodeTest);
+  let externalCurrentNode = setCurrentNode(firstNodeTest);
 
   // parent checks needed for rendering, must be reusable
-  const isParent = checkValidParent(currentNode.node);
-  const isChild = checkValidChildren(currentNode.node);
+  const isParent = checkValidParent(externalCurrentNode.node);
+  const isChild = checkValidChildren(externalCurrentNode.node);
 
   // Ensure correct grid layout
   setUpGrid(isParent, isChild);
@@ -93,8 +108,9 @@ function paint() {
   // At this point I had the thought to extract the sibling helpers out of the CurrentNode class, but for now, I'm content with only rendering a single parent. I could potentially have 2 CurrentNode instances to have access to the sibling helpers for the parent. .children covers descendent nodes.
   
   // render current gen
-  renderCurrentNodeGeneration(currentNode)
+  renderCurrentNodeGeneration(externalCurrentNode)
   
+  console.log(externalCurrentNode);
   
   
   

@@ -1,7 +1,7 @@
-const mainContainer = document.querySelector("#main-container");
-const nodeContainer = document.querySelector("#node-container");
-const parentNodeContainer = document.querySelector('div[data-node-id="parent"]')
-const currentNodeContainer = document.querySelector('div[data-node-id="current"]')
-const childrenNodeContainer = document.querySelector('div[data-node-id="children"]')
+const mainContainerElement = document.querySelector("#main-container");
+const nodeContainerElement = document.querySelector("#node-container");
+const parentNodeContainerElement = document.querySelector('div[data-node-id="parent"]')
+const currentNodeContainerElement = document.querySelector('div[data-node-id="current"]')
+const childrenNodeContainerElement = document.querySelector('div[data-node-id="children"]')
 
-export { nodeContainer, parentNodeContainer, currentNodeContainer, childrenNodeContainer }
+export { nodeContainerElement, parentNodeContainerElement, currentNodeContainerElement, childrenNodeContainerElement }
