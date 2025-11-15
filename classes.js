@@ -1,11 +1,16 @@
+class StaticNodeRect {
+  constructor(clientNode) {
+    this.clientNode = clientNode;
+    this.rect = this.clientNode?.getBoundingClientRect();
+    this.dimensions = new ContainerDimensions(this.rect.height, this.rect.width);
+    this.boundaries = new ContainerBoundaries(this.rect.top, this.rect.bottom, this.rect.left, this.rect.right);
+  }
+}
+
 class NodeRect {
   constructor(externalNode, clientNode = null) {
     this.externalNode = externalNode;
     this.clientNode = clientNode;
-    // include this.clientNode for access to browser viewable node
-
-    // rewrite this ⏬ to clientNode and ensure that rect, dimensions and boundaries are null until this.clientNode exists.
-    // this.rect = this.externalNode.getBoundingClientRect();
 
     if (this.clientNode) {
       this.rect = this.clientNode?.getBoundingClientRect();
@@ -17,22 +22,30 @@ class NodeRect {
   }
 }
 
+/**
+ * @typedef {Object} CurrentNode
+ * @property {HTMLElement} node
+ * continue writing further types (you need TS as a dev dep)
+ */
 class CurrentNode {
-  constructor(node, siblingSet = new Set(), siblings = null) {
-    this.node = node;
-    this.err = this.improperNode(node)
+  constructor(externalNode, clientNode = null, siblingSet = new Set(), siblings = null) {
+    // this node refers to the external clientNode
+    // do something similar with CurrentNode, that you did with NodeRect. You need to have the clientNode property available so that when you render the client adjacent node, you are able to update the rect details on the instance of CurrentNode. Later wanting to manage the scroll offset you can refer easily to the clientNodeRect via the container found through current.clientNode.
+    this.externalNode = externalNode;
+    this.clientNode = clientNode;
+    this.err = this.improperNode(externalNode)
 
     if (this.err) {
       console.error("node must exist within the DOM and may not be <head>, <body> or <script>.")
       return;
     }
 
-    this.children = node.children;
+    this.children = externalNode.children;
     this.siblingSet = siblingSet;
 
-    if (!this.siblingSet.has(node)) {
+    if (!this.siblingSet.has(externalNode)) {
       this.siblingSet.clear()
-      this.siblingSet = this.findSiblings(node, this.siblingSet);
+      this.siblingSet = this.findSiblings(externalNode, this.siblingSet);
       this.siblings = this.siblingSet.size > 0 ? this.sortSiblings(this.siblingSet) : [];
       // this.siblings = this.sortSiblings(this.siblingSet);
     }
@@ -83,6 +96,11 @@ class CurrentNode {
   }
 }
 
+/** 
+ * @typedef {Object} ContainerDimensions
+ * @property {number} height
+ * @property {number} width
+*/
 class ContainerDimensions {
   constructor(height, width) {
     this.height = height;
@@ -98,4 +116,4 @@ class ContainerBoundaries {
   }
 }
 
-export { CurrentNode, ContainerDimensions, ContainerBoundaries, NodeRect }
+export { CurrentNode, ContainerDimensions, ContainerBoundaries, NodeRect, StaticNodeRect }

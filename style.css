@@ -40,6 +40,8 @@ body {
 
 .arrow-row {
 	display: flex;
+  overflow-x: auto;
+  scroll-snap-type: mandatory;
 	gap: 10px;
 }
 
