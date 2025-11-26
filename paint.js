@@ -54,20 +54,38 @@ function setUpGrid(isParent, isChild) {
   }
 }
 
-function renderCurrentNodeGeneration(externalCurrentNode) {
+function defineGridChunk(chunk) {
+  let gridFractionString = ""
+  for (let i = 0; i < chunk; i++) {
+    gridFractionString += "1fr "
+  }
+  return gridFractionString.trimEnd();
+}
+
+function createNodeContainer(i, chunk, gridString) {
+  if ((i) % chunk === 0) {
+    const container = document.createElement("div");
+    container.id = `node-container${Math.floor(i / chunk)}`
+    container.classList.add("grid","chunk");
+    container.style.gridTemplateColumns = gridString
+    currentNodeContainerElement.appendChild(container);
+  }
+}
+
+function renderCurrentNodeGeneration(externalCurrentNode, chunk, gridString) {
   /*
     please simplify current instance to simply `current`. The properties are self descriptive.
 
     This function renders an element to the client for each external node of current generation (sibling). It also adds a reference to the clients current element, which can be referred to elsewhere.  
     
   */
-
-
   externalCurrentNode.siblings.forEach((sibling, i) => {
+    createNodeContainer(i,chunk, gridString)
+    
     const nodeElement = document.createElement("div");
-    nodeElement.classList.add("node");
+    nodeElement.classList.add("node-square");
     nodeElement.setAttribute("tabindex", i);
-    currentNodeContainerElement.querySelector(".flex").appendChild(nodeElement)
+    currentNodeContainerElement.querySelector(`#node-container${Math.floor(i/chunk)}`).appendChild(nodeElement)
 
     // At this point we can update the externalCurrentNode (passed via initial arg) with .siblings at i with new NodeRect(nodeElement) 
 
@@ -84,8 +102,9 @@ function renderCurrentNodeGeneration(externalCurrentNode) {
   })
 }
 
-function scrollSiblings(externalCurrentNode) {
-
+function scrollSiblings(current) {
+  console.log(current.clientNode);
+  
   /*
     function centerItem(container, item) {
       const containerRect = container.getBoundingClientRect();
@@ -100,8 +119,6 @@ function scrollSiblings(externalCurrentNode) {
     }   
   */
 
-
-  console.log(externalCurrentNode);
 
   // currentNodeContainerElement.scrollTo({
   // left: scrollOffSet,
@@ -119,26 +136,26 @@ function checkValidChildren(node) {
   return (node.children.length > 0);
 }
 
-function paint() {
+function paint(current = setCurrentNode(firstNodeTest), chunk = 3) {
   // paint cycle
-  // set current node
-  let externalCurrentNode = setCurrentNode(firstNodeTest);
 
   // parent checks needed for rendering, must be reusable
-  const isParent = checkValidParent(externalCurrentNode.externalNode);
-  const isChild = checkValidChildren(externalCurrentNode.externalNode);
+  const isParent = checkValidParent(current.externalNode);
+  const isChild = checkValidChildren(current.externalNode);
 
   // Ensure correct grid layout
   setUpGrid(isParent, isChild);
 
+  const gridString = defineGridChunk(chunk)
+
   // At this point I had the thought to extract the sibling helpers out of the CurrentNode class, but for now, I'm content with only rendering a single parent. I could potentially have 2 CurrentNode instances to have access to the sibling helpers for the parent. .children covers descendent nodes.
 
   // render current gen
-  renderCurrentNodeGeneration(externalCurrentNode)
+  renderCurrentNodeGeneration(current, chunk, gridString)
 
-  // console.log(externalCurrentNode);
+  console.log(current);
 
-  scrollSiblings(externalCurrentNode)
+  scrollSiblings(current)
 
 
 };
