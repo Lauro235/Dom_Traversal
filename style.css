@@ -182,6 +182,10 @@ button:focus {
 	transition: background-color 0.2s ease;
 }
 
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Hides scrollbar in WebKit-based browsers (Chrome, Safari, Opera, Edge) */
+}
+
 .focus {
   background-color: #0f0;
 

@@ -1,3 +1,5 @@
+
+
 class StaticNodeRect {
   constructor(clientNode) {
     this.clientNode = clientNode;
@@ -17,20 +19,16 @@ class NodeRect {
       this.dimensions = new ContainerDimensions(this.rect.height, this.rect.width);
       this.boundaries = new ContainerBoundaries(this.rect.top, this.rect.bottom, this.rect.left, this.rect.right);
     }
-
-
   }
 }
 
 /**
- * @typedef {Object} CurrentNode
+ * @typedef {Object} FirstNode
  * @property {HTMLElement} node
  * continue writing further types (you need TS as a dev dep)
  */
-class CurrentNode {
+class FirstNode {
   constructor(externalNode, clientNode = null, siblingSet = new Set(), siblings = null) {
-    // this node refers to the external clientNode
-    // do something similar with CurrentNode, that you did with NodeRect. You need to have the clientNode property available so that when you render the client adjacent node, you are able to update the rect details on the instance of CurrentNode. Later wanting to manage the scroll offset you can refer easily to the clientNodeRect via the container found through current.clientNode.
     this.externalNode = externalNode;
     this.clientNode = clientNode;
     this.err = this.improperNode(externalNode)
@@ -107,6 +105,7 @@ class ContainerDimensions {
     this.width = width;
   }
 }
+
 class ContainerBoundaries {
   constructor(top, bottom, left, right) {
     this.top = top;
@@ -116,4 +115,34 @@ class ContainerBoundaries {
   }
 }
 
-export { CurrentNode, ContainerDimensions, ContainerBoundaries, NodeRect, StaticNodeRect }
+class EventEmitter {
+  // Efficient Solution
+  constructor() {
+    this.events = new Map();
+  }
+  subscribe(eventName, callback) {
+    if (!this.events.has(eventName)) {
+      this.events.set(eventName, [callback]);
+    } else {
+      // event name exists and has at least one function
+      this.events.get(eventName).push(callback);
+    }
+
+    return {
+      unsubscribe: () => {
+        const callbackArray = this.events.get(eventName);
+        const lastIndex = callbackArray.lastIndexOf(callback);
+        if (lastIndex !== -1) {
+          callbackArray.splice(lastIndex, 1);
+        }
+      },
+    };
+  }
+  emit(eventName, args) {
+    const callbacks = this.events.get(eventName);
+    if (!callbacks) return [];
+    return callbacks.forEach((cb) => cb(...args));
+  }
+}
+
+export { FirstNode, ContainerDimensions, ContainerBoundaries, NodeRect, StaticNodeRect }

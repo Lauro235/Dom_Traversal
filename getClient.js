@@ -7,7 +7,5 @@ const clientDocument = fetch('./sample.html')
     // export default clientDocument;
   })
   .catch(error => console.error('Error:', error));
-
-const mainSection = document.querySelector('#main__container');
-
+  
 export default await clientDocument;
